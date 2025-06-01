@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Tỏ Tình 3D</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      perspective: 800px;
+    }
+
+    .layer {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      transform-style: preserve-3d;
+    }
+
+    .falling-item {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      color: white;
+      font-size: 20px;
+      animation: fall3d linear;
+      text-shadow: 0 0 10px #ff69b4;
+      transition: transform 0.2s ease-out;
+      will-change: transform;
+    }
+
+    .heart-small {
+      color: #ff4d6d;
+      font-size: 20px;
+      animation: pulse-small 1.5s infinite;
+      text-shadow: 0 0 10px red;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: twinkle 2s infinite;
+    }
+
+    @keyframes fall3d {
+      0% {
+        transform: translateY(-100px) translateZ(0px) rotateX(0deg) rotateY(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) translateZ(-200px) rotateX(30deg) rotateY(30deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes pulse-small {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🎵 Nhạc nền -->
+  <audio autoplay loop hidden>
+    <source src="SOOBIN - Dancing In The Dark - 'BẬT NÓ LÊN' Album (Official MV) (mp3cut.net).mp3" type="audio/mpeg">
+    Trình duyệt của bạn không hỗ trợ phát nhạc.
+  </audio>
+
+  <!-- Các lớp hiệu ứng -->
+  <div class="layer" id="stars"></div>
+  <div class="layer" id="layer1"></div>
+  <div class="layer" id="layer2"></div>
+  <div class="layer" id="layer3"></div>
+  <div class="layer" id="layer4"></div>
+
+  <script>
+    const messages = [
+      "Gửi đến em ...",
+      "Chúc iemm bé Thuý XĐ của anh 1/6 vui vẻ, hạnh phúc.",
+      "Mỗi ngày trôi qua đều luôn vui tươi em nhó ",
+      "Anh mong những điều tốt đẹp và may mắn sẽ đến với em"
+    ];
+
+    function createFallingItem(layerId, speed, interval) {
+      const layer = document.getElementById(layerId);
+      setInterval(() => {
+        const item = document.createElement("div");
+        item.className = "falling-item";
+        item.style.left = Math.random() * window.innerWidth + "px";
+        item.style.animationDuration = speed + "s";
+        item.style.fontSize = (18 + Math.random() * 6) + "px";
+
+        const rotateX = (Math.random() - 0.5) * 60;
+        const rotateY = (Math.random() - 0.5) * 60;
+        const z = (Math.random() - 0.5) * 400;
+        item.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(${z}px)`;
+
+        const heart = document.createElement("span");
+        heart.className = "heart-small";
+        heart.innerText = "❤️";
+
+        const msg = document.createElement("span");
+        msg.innerText = messages[Math.floor(Math.random() * messages.length)];
+
+        item.appendChild(heart);
+        item.appendChild(msg);
+        layer.appendChild(item);
+
+        setTimeout(() => item.remove(), speed * 1000);
+      }, interval);
+    }
+
+    function createStars(num) {
+      const starsLayer = document.getElementById("stars");
+      for (let i = 0; i < num; i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        star.style.left = Math.random() * 100 + "%";
+        star.style.top = Math.random() * 100 + "%";
+        star.style.animationDuration = (1 + Math.random() * 3) + "s";
+        star.style.width = star.style.height = (1 + Math.random() * 2) + "px";
+        starsLayer.appendChild(star);
+      }
+    }
+
+    // Khởi động hiệu ứng
+    createStars(100);
+    createFallingItem("layer1", 10, 1000);
+    createFallingItem("layer2", 12, 1100);
+    createFallingItem("layer3", 14, 1200);
+    createFallingItem("layer4", 16, 1300);
+  </script>
+</body>
+</html>
