@@ -28,6 +28,7 @@
       font-size: 20px;
       animation: fall linear;
       text-shadow: 0 0 10px #ff69b4;
+      transition: transform 0.2s ease-out;
     }
 
     .heart-small {
@@ -65,10 +66,8 @@
 </head>
 <body>
 
-  <!-- Lớp sao nền -->
   <div class="layer" id="stars"></div>
 
-  <!-- Các lớp trái tim và câu chữ -->
   <div class="layer" id="layer1"></div>
   <div class="layer" id="layer2"></div>
   <div class="layer" id="layer3"></div>
@@ -76,24 +75,13 @@
 
   <script>
     const messages = [
-      "Anh yêu em!",
-      "Em là cả thế giới của anh.",
-      "Mỗi ngày bên em là một điều kỳ diệu.",
-      "Anh chỉ muốn được nắm tay em mãi mãi.",
-      "Trái tim anh chỉ dành cho em.",
-      "Không có em, anh như mất phương hướng.",
-      "Anh luôn nghĩ về em.",
-      "Em là nắng ấm trong ngày đông lạnh giá.",
-      "Mỗi nụ cười của em là món quà vô giá.",
-      "Anh muốn cùng em đi đến cuối cuộc đời.",
-      "Anh yêu tất cả những gì thuộc về em.",
-      "Em làm trái tim anh rung động từng giây.",
-      "Anh không thể sống thiếu em.",
-      "Tình yêu anh dành cho em là vĩnh cửu.",
-      "Làm người yêu anh nhé!"
+      "Gửi đến em ...",
+      "Chúc iemm bé Thuý XĐ của anh 1/6 vui vẻ, hạnh phúc.",
+      "Mỗi ngày trôi qua đều luôn vui tươi em nhó ",
+      "Anh mong những điều tốt đẹp và may mắn sẽ đến với em"
     ];
 
-    function createFallingItem(layerId, speed) {
+    function createFallingItem(layerId, speed, interval) {
       const layer = document.getElementById(layerId);
       setInterval(() => {
         const item = document.createElement("div");
@@ -114,7 +102,7 @@
         layer.appendChild(item);
 
         setTimeout(() => item.remove(), speed * 1000);
-      }, 400);
+      }, interval);
     }
 
     function createStars(num) {
@@ -130,12 +118,38 @@
       }
     }
 
-    // Khởi tạo hiệu ứng
+    // Góc xoay khi vuốt
+    let rotateX = 0, rotateY = 0;
+    function handleRotate(event) {
+      let x, y;
+      if (event.type.startsWith('touch')) {
+        const touch = event.touches[0];
+        x = touch.clientX;
+        y = touch.clientY;
+      } else {
+        x = event.clientX;
+        y = event.clientY;
+      }
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      rotateY = (x - centerX) / centerX * 15;
+      rotateX = -(y - centerY) / centerY * 15;
+
+      const items = document.querySelectorAll('.falling-item');
+      items.forEach(el => {
+        el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+    }
+
+    window.addEventListener('mousemove', handleRotate);
+    window.addEventListener('touchmove', handleRotate);
+
+    // Khởi tạo
     createStars(100);
-    createFallingItem("layer1", 5);
-    createFallingItem("layer2", 7);
-    createFallingItem("layer3", 10);
-    createFallingItem("layer4", 13);
+    createFallingItem("layer1", 7, 1000);  // slow + thưa
+    createFallingItem("layer2", 9, 1100);
+    createFallingItem("layer3", 12, 1200);
+    createFallingItem("layer4", 15, 1300);
   </script>
 </body>
 </html>
