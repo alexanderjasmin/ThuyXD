@@ -18,8 +18,11 @@
       pointer-events: none;
     }
 
-    .text {
+    .falling-item {
       position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 5px;
       white-space: nowrap;
       color: white;
       font-size: 20px;
@@ -28,10 +31,9 @@
     }
 
     .heart-small {
-      position: absolute;
       color: #ff4d6d;
-      font-size: 18px;
-      animation: fall linear, pulse-small 1.5s infinite;
+      font-size: 20px;
+      animation: pulse-small 1.5s infinite;
       text-shadow: 0 0 10px red;
     }
 
@@ -56,21 +58,17 @@
     }
 
     @keyframes twinkle {
-      0%, 100% { opacity: 0.2; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.4); }
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
     }
   </style>
 </head>
 <body>
 
-  <!-- Phát nhạc nền -->
-  <audio autoplay loop hidden>
-    <source src="SOOBIN - Dancing In The Dark - 'BẬT NÓ LÊN' Album (Official MV) (mp3cut.net).mp3" type="audio/mpeg">
-    Trình duyệt của bạn không hỗ trợ phát âm thanh.
-  </audio>
-
-  <!-- Các lớp hiệu ứng -->
+  <!-- Lớp sao nền -->
   <div class="layer" id="stars"></div>
+
+  <!-- Các lớp trái tim và câu chữ -->
   <div class="layer" id="layer1"></div>
   <div class="layer" id="layer2"></div>
   <div class="layer" id="layer3"></div>
@@ -78,37 +76,44 @@
 
   <script>
     const messages = [
-      "Gửi đến em ...",
-      "Chúc iemm bé Thuý XĐ của anh 1/6 vui vẻ, hạnh phúc.",
-      "Mỗi ngày trôi qua đều luôn vui tươi em nhó ",
-      "Anh mong những điều tốt đẹp và may mắn sẽ đến với em"
+      "Anh yêu em!",
+      "Em là cả thế giới của anh.",
+      "Mỗi ngày bên em là một điều kỳ diệu.",
+      "Anh chỉ muốn được nắm tay em mãi mãi.",
+      "Trái tim anh chỉ dành cho em.",
+      "Không có em, anh như mất phương hướng.",
+      "Anh luôn nghĩ về em.",
+      "Em là nắng ấm trong ngày đông lạnh giá.",
+      "Mỗi nụ cười của em là món quà vô giá.",
+      "Anh muốn cùng em đi đến cuối cuộc đời.",
+      "Anh yêu tất cả những gì thuộc về em.",
+      "Em làm trái tim anh rung động từng giây.",
+      "Anh không thể sống thiếu em.",
+      "Tình yêu anh dành cho em là vĩnh cửu.",
+      "Làm người yêu anh nhé!"
     ];
 
-    function createFallingText(layerId, speed) {
+    function createFallingItem(layerId, speed) {
       const layer = document.getElementById(layerId);
       setInterval(() => {
-        const text = document.createElement("div");
-        text.className = "text";
-        text.innerText = messages[Math.floor(Math.random() * messages.length)];
-        text.style.left = Math.random() * window.innerWidth + "px";
-        text.style.animationDuration = speed + "s";
-        text.style.fontSize = (18 + Math.random() * 6) + "px";
-        layer.appendChild(text);
-        setTimeout(() => text.remove(), speed * 1000);
-      }, 600);
-    }
+        const item = document.createElement("div");
+        item.className = "falling-item";
+        item.style.left = Math.random() * window.innerWidth + "px";
+        item.style.animationDuration = speed + "s";
+        item.style.fontSize = (18 + Math.random() * 6) + "px";
 
-    function createFallingHeart(layerId, speed) {
-      const layer = document.getElementById(layerId);
-      setInterval(() => {
-        const heart = document.createElement("div");
+        const heart = document.createElement("span");
         heart.className = "heart-small";
         heart.innerText = "❤️";
-        heart.style.left = Math.random() * window.innerWidth + "px";
-        heart.style.animationDuration = speed + "s";
-        heart.style.fontSize = (16 + Math.random() * 10) + "px";
-        layer.appendChild(heart);
-        setTimeout(() => heart.remove(), speed * 1000);
+
+        const msg = document.createElement("span");
+        msg.innerText = messages[Math.floor(Math.random() * messages.length)];
+
+        item.appendChild(heart);
+        item.appendChild(msg);
+        layer.appendChild(item);
+
+        setTimeout(() => item.remove(), speed * 1000);
       }, 400);
     }
 
@@ -119,26 +124,18 @@
         star.className = "star";
         star.style.left = Math.random() * 100 + "%";
         star.style.top = Math.random() * 100 + "%";
-        star.style.animationDuration = (1 + Math.random() * 2) + "s";
+        star.style.animationDuration = (1 + Math.random() * 3) + "s";
         star.style.width = star.style.height = (1 + Math.random() * 2) + "px";
         starsLayer.appendChild(star);
       }
     }
 
-    // Hiệu ứng
-    createFallingText("layer1", 5);
-    createFallingHeart("layer1", 5);
-
-    createFallingText("layer2", 7);
-    createFallingHeart("layer2", 7);
-
-    createFallingText("layer3", 10);
-    createFallingHeart("layer3", 10);
-
-    createFallingText("layer4", 13);
-    createFallingHeart("layer4", 13);
-
+    // Khởi tạo hiệu ứng
     createStars(100);
+    createFallingItem("layer1", 5);
+    createFallingItem("layer2", 7);
+    createFallingItem("layer3", 10);
+    createFallingItem("layer4", 13);
   </script>
 </body>
 </html>
